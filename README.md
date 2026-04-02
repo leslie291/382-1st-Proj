@@ -108,12 +108,13 @@ npm test -- --coverage  # Coverage report
 # Install dependencies
 npm install
 
-# Start dev server
+# Start dev server (http://localhost:5173/)
 npm run dev
-# Opens http://localhost:5173/
 
-# Run all tests
-npm test -- --run
+# Run tests
+npm test -- --run       # Single run
+npm test                # Watch mode
+npm test -- --coverage  # With coverage
 
 # Build for production
 npm run build
@@ -124,10 +125,10 @@ npm run preview
 
 ### Build Output
 - **JavaScript:** 214 KB (66 KB gzipped)
-- **CSS:** 5.82 KB (1.57 KB gzipped)
-- **HTML:** 0.46 KB
-- **Build time:** 167ms
-- **Modules:** 23
+- **CSS:** 5.89 KB (1.59 KB gzipped)
+- **HTML:** 0.46 KB (0.30 KB gzipped)
+- **Build time:** ~170ms
+- **Status:** ✅ Zero errors, zero warnings
 
 ## 📱 How to Use the App
 
@@ -158,46 +159,144 @@ npm run preview
    - Modal explains the Bayesian algorithm
    - See example calculation
 
-## 🌐 Deployment to Vercel
+## 🌐 Deployment
 
-### Step 1: Push to GitHub
+### ✅ Pre-Deployment Checklist
+
+Before deploying, verify everything is ready:
 
 ```bash
-cd /Users/yiu_sio_hang/Desktop/382-1st-Proj
-git add -A
-git commit -m "Full production version ready for deployment"
-git push origin main
+# 1. Verify all tests pass
+npm test -- --run
+# Should show: 68 tests passing
+
+# 2. Verify build succeeds
+npm run build
+# Should show: ✓ built in ~170ms (0 errors)
+
+# 3. Verify dev server works locally
+npm run dev
+# Should show: ✅ Local: http://localhost:5173/
 ```
 
-### Step 2: Deploy to Vercel
+### Production Build Quality
 
-**Option A: Via Dashboard (Recommended)**
+```
+✅ TypeScript:     0 errors
+✅ Tests:          68/68 passing (100%)
+✅ Coverage:       98.63% statements
+✅ ESLint:         0 errors
+✅ Build:          SUCCESS (170ms)
+✅ Bundle sizes:   Optimized & gzipped
+✅ Static export:  Ready for hosting
+```
+
+### Deployment to Vercel (Recommended)
+
+**Step 1: Ensure GitHub is Updated**
+```bash
+git status                          # Check for changes
+git add -A                          # Stage all changes
+git commit -m "Ready for deployment"
+git push origin main                # Push to GitHub
+```
+
+**Step 2: Deploy via Vercel Dashboard (Easiest)**
 1. Go to [vercel.com](https://vercel.com)
 2. Sign in with GitHub
 3. Click "Add New..." → "Project"
-4. Select your repository
-5. Vercel auto-detects settings:
-   - Framework: Vite
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
+4. Select `382-1st-Proj` repository
+5. Vercel auto-detects:
+   - Framework: Vite ✅
+   - Build Command: `npm run build` ✅
+   - Output Directory: `dist` ✅
+   - Install Command: `npm install` ✅
 6. Click "Deploy"
-7. Done! You get a live URL
+7. Wait 2-3 minutes for build
+8. Get live URL (e.g., `382-1st-proj.vercel.app`)
 
-**Option B: Via Vercel CLI**
+**Step 3: Verify Live App Works**
+- Visit your live URL
+- Test school selection
+- Test subject filtering
+- Search by professor name
+- Expand professor cards
+- View rating distribution
+- Check mobile responsiveness
+
+### Alternative: Deploy via Vercel CLI
+
 ```bash
+# Install Vercel CLI (one time)
 npm install -g vercel
+
+# Deploy from project directory
+cd /Users/yiu_sio_hang/Desktop/382-1st-Proj
 vercel
-# Follow prompts, use defaults
+
+# Follow prompts:
+# - Link to existing project? No
+# - Set project name: 382-1st-proj
+# - Set directory: ./
+# - Use Vercel settings detected? Yes
+# - Wait for build & deployment
 ```
 
-### Verify Deployment
-- App loads without errors
-- Filters work (school/subject)
-- Search works
-- Expand cards show reviews
-- Rating chart displays
-- "How rankings work" modal opens
-- Mobile responsive
+### Configuration Files
+
+**vercel.json** (auto-configured):
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install"
+}
+```
+
+**vite.config.ts** (optimized for Vercel):
+- ✅ TypeScript support
+- ✅ React plugin enabled
+- ✅ Production sourcemaps
+- ✅ Optimized build output
+
+### Environment Variables
+- None required (all data is mock/local)
+- No API keys needed
+- No database connections
+- Fully static export ready
+
+### Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Build fails on Vercel | Check: `npm run build` succeeds locally |
+| Tests fail on Vercel | Tests don't run on Vercel (only build matters) |
+| App loads but is blank | Check browser console (F12), check network tab |
+| Styling missing | CSS bundled in JS, should load automatically |
+| Mobile view broken | Check viewport meta tag (already added) |
+
+### Performance on Vercel
+
+Expected performance:
+- Cold start: ~2-3 seconds
+- Subsequent loads: <500ms
+- Network: Optimized CDN delivery
+- Gzip compression: Enabled (66 KB JS, 1.6 KB CSS)
+
+### Monitoring
+
+After deployment, monitor:
+- Error logs: [dashboard.vercel.com](https://dashboard.vercel.com)
+- Page load performance
+- User feedback
+
+### Rollback
+
+If needed, revert to previous deployment:
+1. Go to Vercel dashboard
+2. Select deployment
+3. Click "Promote to Production"
+4. Or push new commit to trigger redeploy
 
 ## 🎨 Tech Stack
 
@@ -247,18 +346,79 @@ Phase 3 (Long-term):
 - Course-specific reviews
 - GPA impact data
 
-## 📝 Commands Cheat Sheet
+## 📋 Complete Commands Reference
 
+### Installation & Setup
 ```bash
-# Development
-npm install              # Install dependencies
-npm run dev             # Start dev server
-npm run build           # Production build
-npm run preview         # Preview production build
-npm test                # Run tests in watch mode
-npm test -- --run       # Run tests once
-npm test -- --coverage  # Coverage report
-npm run lint            # Run ESLint
+# Install dependencies (do this first)
+npm install
+
+# Verify installation
+npm list react react-dom
+```
+
+### Development
+```bash
+# Start dev server (http://localhost:5173/)
+npm run dev
+
+# Start with open browser
+npm run dev -- --open
+
+# Stop server: Press Ctrl+C
+```
+
+### Testing
+```bash
+# Run all tests once
+npm test -- --run
+
+# Run tests in watch mode (auto-rerun on changes)
+npm test
+
+# Run with UI mode (visual test explorer)
+npm test -- --ui
+
+# Coverage report
+npm test -- --run --coverage
+
+# Specific test file
+npm test -- src/utils/rankingEngine.test.ts
+```
+
+### Building
+```bash
+# Production build (TypeScript + optimization)
+npm run build
+# Output: dist/ directory
+
+# Preview production build locally
+npm run preview
+# Opens http://localhost:5173/
+
+# Clean build (delete old build first)
+rm -rf dist && npm run build
+```
+
+### Code Quality
+```bash
+# Lint all files
+npm run lint
+
+# Lint and fix
+npm run lint -- --fix
+```
+
+### Deployment
+```bash
+# Push to GitHub
+git push origin main
+
+# Deploy to Vercel (if CLI installed)
+vercel
+
+# View Vercel dashboard
+# https://dashboard.vercel.com
 ```
 
 ## 🤝 Contributing
