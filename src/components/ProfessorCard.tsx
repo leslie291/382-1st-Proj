@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Professor } from '../types/professor';
+import { getReviewPair } from '../utils/commentUtils';
 
 interface ProfessorCardProps {
   professor: Professor;
@@ -7,9 +8,7 @@ interface ProfessorCardProps {
 
 export function ProfessorCard({ professor }: ProfessorCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const highestComment = professor.comments.reduce((a, b) => (a.rating > b.rating ? a : b));
-  const lowestComment = professor.comments.reduce((a, b) => (a.rating < b.rating ? a : b));
+  const { best, worst } = getReviewPair(professor.comments);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
@@ -62,27 +61,37 @@ export function ProfessorCard({ professor }: ProfessorCardProps) {
       {isExpanded && (
         <div className="border-t border-gray-200 p-4 bg-gray-50">
           <div className="space-y-4">
-            <div>
-              <h4 className="font-semibold text-sm text-gray-900 mb-2">Best Review</h4>
-              <div className="bg-white p-3 rounded border-l-4 border-green-500">
-                <div className="flex justify-between items-start mb-1">
-                  <span className="text-sm font-medium text-gray-700">★ {highestComment.rating}/5</span>
-                  <span className="text-xs text-gray-500">{highestComment.date}</span>
+            {best && (
+              <div>
+                <h4 className="font-semibold text-sm text-gray-900 mb-2">Best Review</h4>
+                <div className="bg-white p-3 rounded border-l-4 border-green-500">
+                  <div className="flex justify-between items-start mb-1">
+                    <span className="text-sm font-medium text-gray-700">★ {best.rating}/5</span>
+                    <span className="text-xs text-gray-500">{best.date}</span>
+                  </div>
+                  <p className="text-sm text-gray-700 line-clamp-3">{best.text}</p>
                 </div>
-                <p className="text-sm text-gray-700">{highestComment.text}</p>
               </div>
-            </div>
+            )}
 
-            <div>
-              <h4 className="font-semibold text-sm text-gray-900 mb-2">Critical Feedback</h4>
-              <div className="bg-white p-3 rounded border-l-4 border-orange-500">
-                <div className="flex justify-between items-start mb-1">
-                  <span className="text-sm font-medium text-gray-700">★ {lowestComment.rating}/5</span>
-                  <span className="text-xs text-gray-500">{lowestComment.date}</span>
+            {worst && (
+              <div>
+                <h4 className="font-semibold text-sm text-gray-900 mb-2">Critical Feedback</h4>
+                <div className="bg-white p-3 rounded border-l-4 border-orange-500">
+                  <div className="flex justify-between items-start mb-1">
+                    <span className="text-sm font-medium text-gray-700">★ {worst.rating}/5</span>
+                    <span className="text-xs text-gray-500">{worst.date}</span>
+                  </div>
+                  <p className="text-sm text-gray-700 line-clamp-3">{worst.text}</p>
                 </div>
-                <p className="text-sm text-gray-700">{lowestComment.text}</p>
               </div>
-            </div>
+            )}
+
+            {!best && !worst && (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500">No reviews available yet</p>
+              </div>
+            )}
           </div>
         </div>
       )}

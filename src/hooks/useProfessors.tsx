@@ -10,11 +10,13 @@ interface ProfessorContextType {
   subjects: string[];
   selectedSchool: string | null;
   selectedSubject: string | null;
+  searchQuery: string;
   topRanked: RankingScore[];
   isLoading: boolean;
   error: string | null;
   selectSchool: (school: string | null) => void;
   selectSubject: (subject: string | null) => void;
+  setSearchQuery: (query: string) => void;
   getProfessorById: (id: string) => Professor | undefined;
 }
 
@@ -27,6 +29,7 @@ interface ProfessorProviderProps {
 export function ProfessorProvider({ children }: ProfessorProviderProps) {
   const [selectedSchool, setSelectedSchool] = useState<string | null>(null);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading] = useState(false);
   const [error] = useState<string | null>(null);
 
@@ -34,10 +37,14 @@ export function ProfessorProvider({ children }: ProfessorProviderProps) {
   const schools = Array.from(new Set(mockProfessors.map(p => p.school)));
   const subjects = Array.from(new Set(mockProfessors.map(p => p.subject)));
 
-  // Filter professors based on selections
+  // Filter professors based on selections and search query
   const filteredProfessors = mockProfessors.filter(prof => {
     if (selectedSchool && prof.school !== selectedSchool) return false;
     if (selectedSubject && prof.subject !== selectedSubject) return false;
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      if (!prof.name.toLowerCase().includes(query)) return false;
+    }
     return true;
   });
 
@@ -62,11 +69,13 @@ export function ProfessorProvider({ children }: ProfessorProviderProps) {
     subjects,
     selectedSchool,
     selectedSubject,
+    searchQuery,
     topRanked,
     isLoading,
     error,
     selectSchool,
     selectSubject,
+    setSearchQuery,
     getProfessorById,
   };
 

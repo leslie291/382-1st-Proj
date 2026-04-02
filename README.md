@@ -1,5 +1,6 @@
 # STEM Professor Finder - MVP
 
+shy25 Sio Hang Yiu https://github.com/leslie291/382-1st-Proj
 A lightweight web app for students to find and compare top-rated STEM professors by school and subject.
 
 ## ⚡ Quick Start
