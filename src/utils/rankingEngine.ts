@@ -84,3 +84,42 @@ function calculateWouldTakeAgainBonus(wouldTakeAgain?: number): number {
 export function getTopProfessors(rankings: RankingScore[], topN: number = 5): RankingScore[] {
   return rankings.slice(0, topN);
 }
+
+/**
+ * Get tough professors: high difficulty, lower ratings
+ * These are challenging courses that students should be aware of
+ */
+export function getToughProfessors(professors: Professor[], topN: number = 5): Professor[] {
+  // Filter professors with difficulty >= 4.0 and rating < 4.2
+  const tough = professors.filter(
+    (p) => p.difficulty !== undefined && p.difficulty >= 4.0 && p.rating < 4.2
+  );
+
+  // Sort by difficulty (descending) as primary, then by rating (ascending)
+  return tough
+    .sort((a, b) => {
+      const diffDiff = (b.difficulty || 0) - (a.difficulty || 0);
+      if (diffDiff !== 0) return diffDiff;
+      return a.rating - b.rating;
+    })
+    .slice(0, topN);
+}
+
+/**
+ * Get new professors: very few ratings (uncertain)
+ * These are new or less-reviewed professors where students should use caution
+ */
+export function getNewProfessors(professors: Professor[], topN: number = 5): Professor[] {
+  // Filter professors with very few ratings (< 10)
+  const newProfs = professors.filter((p) => p.ratingCount < 10);
+
+  // Sort by rating count (ascending) then by rating (descending)
+  return newProfs
+    .sort((a, b) => {
+      if (a.ratingCount !== b.ratingCount) {
+        return a.ratingCount - b.ratingCount;
+      }
+      return b.rating - a.rating;
+    })
+    .slice(0, topN);
+}

@@ -8,6 +8,7 @@ export interface Professor {
   ratingCount: number;
   difficulty?: number;
   wouldTakeAgain?: number;
+  rateMyProfessorUrl?: string;
   comments: Comment[];
 }
 

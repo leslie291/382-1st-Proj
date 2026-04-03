@@ -18,7 +18,21 @@ export function ProfessorCard({ professor }: ProfessorCardProps) {
       >
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">{professor.name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900">{professor.name}</h3>
+              {professor.rateMyProfessorUrl && (
+                <a
+                  href={professor.rateMyProfessorUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200 transition-colors"
+                  title="Verify on RateMyProfessors.com"
+                >
+                  RMP ↗
+                </a>
+              )}
+            </div>
             <p className="text-sm text-gray-600">{professor.subject} • {professor.school}</p>
             <p className="text-xs text-gray-500 mt-1">{professor.department}</p>
           </div>
