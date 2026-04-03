@@ -25,8 +25,8 @@ describe('ProfessorProvider & useProfessors integration', () => {
     expect(result.current.schools).toBeDefined();
     expect(Array.isArray(result.current.schools)).toBe(true);
     expect(result.current.schools.length).toBeGreaterThan(0);
-    // Should include major universities
-    expect(result.current.schools).toContain('MIT');
+    // Should include UW schools
+    expect(result.current.schools).toContain('UW Seattle');
   });
 
   it('provides available subjects', () => {
