@@ -3,6 +3,7 @@ import { FilterControls } from './components/FilterControls';
 import { ProfessorResults } from './components/ProfessorResults';
 import { RatingDistribution } from './components/RatingDistribution';
 import { HowRankingsWork } from './components/HowRankingsWork';
+import { DataUpdateInfo } from './components/DataUpdateInfo';
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
         </header>
 
         <FilterControls />
+
+        <div className="max-w-7xl mx-auto px-4 mt-6">
+          <DataUpdateInfo />
+        </div>
 
         <main>
           <RatingDistribution />
