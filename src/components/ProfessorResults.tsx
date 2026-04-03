@@ -6,75 +6,74 @@ export function ProfessorResults() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <div className="text-gray-500">Loading professors...</div>
+      <div className="flex justify-center items-center py-16">
+        <div className="text-center">
+          <div className="w-8 h-8 border-3 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-gray-600">Loading professors...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mx-auto max-w-7xl">
-        <p className="text-red-700">Error: {error}</p>
+      <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+        <p className="text-red-700 font-medium">Error: {error}</p>
       </div>
     );
   }
 
   if (professors.length === 0) {
     return (
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mx-auto max-w-7xl">
-        <p className="text-yellow-700">No professors found.</p>
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+        <p className="text-amber-700 font-medium">No professors found.</p>
       </div>
     );
   }
 
   if (topRanked.length === 0) {
     return (
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mx-auto max-w-7xl">
-        <p className="text-yellow-700">No results yet.</p>
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+        <p className="text-amber-700 font-medium">No results yet.</p>
       </div>
     );
   }
 
   return (
-    <div className="py-6 px-4">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Hand-Picked Top Professors</h2>
-        <p className="text-sm text-gray-600 mb-6">
-          5 professors randomly selected from UW Bothell CS department and ranked by rating.
-          Click the "RMP ↗" link to verify ratings on RateMyProfessor.
+    <div className="space-y-8">
+      {/* Results header */}
+      <div>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Hand-Picked Professors</h2>
+        <p className="text-gray-600 max-w-2xl">
+          5 professors randomly selected from UW Bothell and ranked by rating. 
+          Click <span className="font-medium">RMP ↗</span> to verify ratings on RateMyProfessor.
         </p>
+      </div>
 
-        <div className="space-y-4">
-          {topRanked.map((ranking, index) => {
-            const professor = getProfessorById(ranking.professorId);
-            if (!professor) return null;
+      {/* Professor list */}
+      <div className="space-y-4">
+        {topRanked.map((ranking, index) => {
+          const professor = getProfessorById(ranking.professorId);
+          if (!professor) return null;
 
-            return (
-              <div key={ranking.professorId}>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-700 text-sm font-bold rounded-full">
-                    {index + 1}
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    Rating: <span className="font-semibold">{professor.rating.toFixed(1)}</span> 
-                    ({professor.ratingCount} reviews)
-                  </span>
-                </div>
-                <ProfessorCard professor={professor} />
-              </div>
-            );
-          })}
-        </div>
+          return (
+            <ProfessorCard 
+              key={ranking.professorId} 
+              professor={professor}
+              rank={index + 1}
+            />
+          );
+        })}
+      </div>
 
-        <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded">
-          <p className="text-xs text-amber-800">
-            <strong>📌 Note:</strong> These 5 professors were hand-picked by the course author 
-            to represent a fair sample. Selection was done by randomly picking from the official 
-            UW Bothell CS department and verifying on RateMyProfessor. Ranking is based on 
-            overall rating and number of ratings received.
-          </p>
-        </div>
+      {/* Footer note */}
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+        <p className="text-sm text-blue-900 leading-relaxed">
+          <span className="font-semibold">Note:</span> These 5 professors were hand-picked by the course author 
+          to represent a fair sample. Selection was done by randomly picking from the official 
+          UW Bothell CS department and verifying on RateMyProfessor. Ranking is based on 
+          overall rating and number of ratings received.
+        </p>
       </div>
     </div>
   );

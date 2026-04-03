@@ -1,41 +1,49 @@
 import { ProfessorProvider } from './hooks/useProfessors';
 import { FilterControls } from './components/FilterControls';
 import { ProfessorResults } from './components/ProfessorResults';
-import { RatingDistribution } from './components/RatingDistribution';
-import { HowRankingsWork } from './components/HowRankingsWork';
 import { DataUpdateInfo } from './components/DataUpdateInfo';
 
 function App() {
   return (
     <ProfessorProvider>
-      <div className="min-h-screen bg-gray-50">
-        <header className="bg-white border-b border-gray-200 py-4">
-          <div className="max-w-7xl mx-auto px-4 flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">STEM Professor Finder</h1>
-              <p className="text-gray-600 mt-1">Find top-rated professors by school and subject</p>
-            </div>
-            <div className="mt-1">
-              <HowRankingsWork />
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+        {/* Header */}
+        <header className="sticky top-0 z-40 backdrop-blur-md bg-white/80 border-b border-gray-200/50">
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            <div className="flex justify-between items-start gap-8">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
+                    Professor Finder
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500">Find the best CS professors at UW Bothell</p>
+              </div>
             </div>
           </div>
         </header>
 
-        <FilterControls />
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-6 py-12">
+          {/* Data Info */}
+          <div className="mb-12">
+            <DataUpdateInfo />
+          </div>
 
-        <div className="max-w-7xl mx-auto px-4 mt-6">
-          <DataUpdateInfo />
-        </div>
+          {/* Filters */}
+          <div className="mb-12">
+            <FilterControls />
+          </div>
 
-        <main>
-          <RatingDistribution />
+          {/* Results */}
           <ProfessorResults />
         </main>
 
-        <footer className="bg-white border-t border-gray-200 py-6 mt-12">
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <p className="text-sm text-gray-600">
-              STEM Professor Finder • Powered by student reviews and intelligent ranking
+        {/* Footer */}
+        <footer className="border-t border-gray-200/50 backdrop-blur-md bg-white/50 mt-20">
+          <div className="max-w-7xl mx-auto px-6 py-8">
+            <p className="text-xs text-gray-500 text-center">
+              Data verified from RateMyProfessor.com • Last updated 2026-04-03
             </p>
           </div>
         </footer>
