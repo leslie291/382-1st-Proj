@@ -25,8 +25,8 @@ describe('ProfessorProvider & useProfessors integration', () => {
     expect(result.current.schools).toBeDefined();
     expect(Array.isArray(result.current.schools)).toBe(true);
     expect(result.current.schools.length).toBeGreaterThan(0);
-    // Should include UW schools
-    expect(result.current.schools).toContain('UW Seattle');
+    // Should include UW Bothell only
+    expect(result.current.schools).toContain('UW Bothell');
   });
 
   it('provides available subjects', () => {

@@ -1,0 +1,403 @@
+/**
+ * UW Bothell - Computing & Software Systems Department
+ * REAL FACULTY from official UW Bothell website:
+ * https://www.uwb.edu/sse/css
+ * 
+ * Instructions for verification:
+ * 1. Go to ratemyprofessor.com
+ * 2. Search "University of Washington Bothell" or "UW Bothell"
+ * 3. Search each professor by name
+ * 4. If found: Add their real rating, review count, and student reviews
+ * 5. If NOT found: Leave as "Data not available on RateMyProfessor"
+ */
+
+export interface ProfessorProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  title: string;
+  school: 'UW Bothell';
+  subject: 'Computer Science';
+  department: 'Department of Computing & Software Systems';
+  
+  // RateMyProfessor data (if available)
+  rating?: number;
+  ratingCount?: number;
+  wouldTakeAgain?: number;
+  difficulty?: number;
+  comments?: Array<{
+    id: string;
+    rating: number;
+    text: string;
+    date: string;
+  }>;
+  
+  // Status
+  rateMyProfessorFound: boolean;
+  lastVerified?: string;
+}
+
+/**
+ * REAL UW Bothell CS Faculty List
+ * Source: https://www.uwb.edu/sse/css/faculty
+ * Last Updated from official site: 2026-04-03
+ */
+export const uwBothellCSFaculty: ProfessorProfile[] = [
+  {
+    id: 'uwb_laurie_anderson',
+    firstName: 'Laurie',
+    lastName: 'Anderson',
+    fullName: 'Laurie Anderson',
+    email: 'lja3@uw.edu',
+    title: 'Associate Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_hazeline_asuncion',
+    firstName: 'Hazeline',
+    lastName: 'Asuncion',
+    fullName: 'Hazeline Asuncion',
+    email: 'hazeline@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_murat_ayhan',
+    firstName: 'Murat Seçkin',
+    lastName: 'Ayhan',
+    fullName: 'Murat Seçkin Ayhan',
+    email: 'msayhan@uw.edu',
+    title: 'Assistant Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_kaylea_champion',
+    firstName: 'Kaylea',
+    lastName: 'Champion',
+    fullName: 'Kaylea Champion',
+    email: 'kaylea@uw.edu',
+    title: 'Assistant Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_mia_champion',
+    firstName: 'Mia',
+    lastName: 'Champion',
+    fullName: 'Mia Champion',
+    email: 'miachamp@uw.edu',
+    title: 'Assistant Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_min_chen',
+    firstName: 'Min',
+    lastName: 'Chen',
+    fullName: 'Min Chen',
+    email: 'minchen2@uw.edu',
+    title: 'Professor & Acting Associate Chair',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_dharma_dailey',
+    firstName: 'Dharma',
+    lastName: 'Dailey',
+    fullName: 'Dharma Dailey',
+    email: 'ddailey@uw.edu',
+    title: 'Assistant Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_marc_dupuis',
+    firstName: 'Marc',
+    lastName: 'Dupuis',
+    fullName: 'Marc Dupuis',
+    email: 'marcjd@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_munehiro_fukuda',
+    firstName: 'Munehiro',
+    lastName: 'Fukuda',
+    fullName: 'Munehiro Fukuda',
+    email: 'mfukuda@uw.edu',
+    title: 'Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_jeffrey_kim',
+    firstName: 'Jeffrey',
+    lastName: 'Kim',
+    fullName: 'Jeffrey Kim',
+    email: 'jykim@uw.edu',
+    title: 'Associate Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_wooyoung_kim',
+    firstName: 'Wooyoung',
+    lastName: 'Kim',
+    fullName: 'Wooyoung Kim',
+    email: 'kimw6@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_nancy_kool',
+    firstName: 'Nancy',
+    lastName: 'Kool',
+    fullName: 'Nancy Kool',
+    email: 'nlkool@uw.edu',
+    title: 'Assistant Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_brent_lagesse',
+    firstName: 'Brent',
+    lastName: 'Lagesse',
+    fullName: 'Brent Lagesse',
+    email: 'lagesse@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_johnny_lin',
+    firstName: 'Johnny',
+    lastName: 'Lin',
+    fullName: 'Johnny Lin',
+    email: 'jwblin@uw.edu',
+    title: 'Teaching Professor & Acting Department Chair',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_afra_mashhadi',
+    firstName: 'Afra',
+    lastName: 'Mashhadi',
+    fullName: 'Afra Mashhadi',
+    email: 'mashhadi@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_clark_olson',
+    firstName: 'Clark',
+    lastName: 'Olson',
+    fullName: 'Clark Olson',
+    email: 'cfolson@uw.edu',
+    title: 'Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_erika_parsons',
+    firstName: 'Erika F.',
+    lastName: 'Parsons',
+    fullName: 'Erika F. Parsons',
+    email: 'efuente@uw.edu',
+    title: 'Associate Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_yang_peng',
+    firstName: 'Yang',
+    lastName: 'Peng',
+    fullName: 'Yang Peng',
+    email: 'yangpeng@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_yusuf_pisan',
+    firstName: 'Yusuf',
+    lastName: 'Pisan',
+    fullName: 'Yusuf Pisan',
+    email: 'pisan@uw.edu',
+    title: 'Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_arkady_retik',
+    firstName: 'Arkady',
+    lastName: 'Retik',
+    fullName: 'Arkady Retik',
+    email: 'aretik@uw.edu',
+    title: 'Associate Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_zachary_rubin',
+    firstName: 'Zachary',
+    lastName: 'Rubin',
+    fullName: 'Zachary (Zak) Rubin',
+    email: 'zarubin@uw.edu',
+    title: 'Assistant Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_dong_si',
+    firstName: 'Dong',
+    lastName: 'Si',
+    fullName: 'Dong Si',
+    email: 'dongsi@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_michael_stiber',
+    firstName: 'Michael',
+    lastName: 'Stiber',
+    fullName: 'Michael Stiber',
+    email: 'stiber@uw.edu',
+    title: 'Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_jeff_stride',
+    firstName: 'Jeff',
+    lastName: 'Stride',
+    fullName: 'Jeff Stride',
+    email: 'jstride@uw.edu',
+    title: 'Assistant Teaching Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_kelvin_sung',
+    firstName: 'Kelvin',
+    lastName: 'Sung',
+    fullName: 'Kelvin Sung',
+    email: 'ksung@uw.edu',
+    title: 'Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_geethapriya_thamilarasu',
+    firstName: 'Geethapriya',
+    lastName: 'Thamilarasu',
+    fullName: 'Geethapriya Thamilarasu',
+    email: 'geetha@uw.edu',
+    title: 'Associate Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+  {
+    id: 'uwb_annuska_zolyomi',
+    firstName: 'Annuska',
+    lastName: 'Zolyomi',
+    fullName: 'Annuska Zolyomi',
+    email: 'annuska@uw.edu',
+    title: 'Assistant Professor',
+    school: 'UW Bothell',
+    subject: 'Computer Science',
+    department: 'Department of Computing & Software Systems',
+    rateMyProfessorFound: false,
+    comments: [],
+  },
+];
+
+export const DATA_LAST_UPDATED = '2026-04-03T04:42:00.000Z';
+export const DATA_SOURCE = 'UW Bothell Official Faculty Directory: https://www.uwb.edu/sse/css/faculty';
+export const DATA_NOTE = 'Real professors from UW Bothell Computing & Software Systems department. RateMyProfessor data will be added when found.';
