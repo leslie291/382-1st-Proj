@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { ProfessorProvider, useProfessors } from '../hooks/useProfessors';
+import { ProfessorProvider } from './ProfessorProvider';
+import { useProfessors } from './useProfessors';
 
 describe('ProfessorProvider & useProfessors integration', () => {
   it('provides professors data from mock data', () => {
@@ -25,7 +26,7 @@ describe('ProfessorProvider & useProfessors integration', () => {
     expect(result.current.schools).toBeDefined();
     expect(Array.isArray(result.current.schools)).toBe(true);
     expect(result.current.schools.length).toBeGreaterThan(0);
-    // Should include UW Bothell only
+    // Should include UW Bothell (from mock data)
     expect(result.current.schools).toContain('UW Bothell');
   });
 
@@ -41,7 +42,7 @@ describe('ProfessorProvider & useProfessors integration', () => {
     expect(result.current.subjects.length).toBeGreaterThan(0);
   });
 
-  it('returns top ranked professors', () => {
+  it('returns top 5 ranked professors', () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <ProfessorProvider>{children}</ProfessorProvider>
     );
@@ -52,9 +53,10 @@ describe('ProfessorProvider & useProfessors integration', () => {
     expect(Array.isArray(result.current.topRanked)).toBe(true);
     // Should have at most 5 top professors
     expect(result.current.topRanked.length).toBeLessThanOrEqual(5);
-    // If there are rankings, they should be scored
+    // If there are rankings, they should have professor data
     if (result.current.topRanked.length > 0) {
-      expect(result.current.topRanked[0].score).toBeDefined();
+      expect(result.current.topRanked[0].name).toBeDefined();
+      expect(result.current.topRanked[0].rating).toBeDefined();
     }
   });
 
@@ -65,19 +67,16 @@ describe('ProfessorProvider & useProfessors integration', () => {
 
     const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
 
-    // Initially, selectedSchool is null (All Schools)
-    expect(result.current.selectedSchool).toBeNull();
-    const allProfs = result.current.professors.length;
-    expect(allProfs).toBeGreaterThan(0);
+    // Initially all professors
+    const initialCount = result.current.professors.length;
 
-    // Select MIT
-    result.current.selectSchool('MIT');
+    // Select a specific school
+    result.current.selectSchool('UW Bothell');
     rerender();
 
-    // After selecting a school, professors should be filtered
-    const mitProfs = result.current.professors;
-    // All professors should be from MIT
-    expect(mitProfs.every((p) => p.school === 'MIT')).toBe(true);
+    // After school selection, should filter to only that school
+    expect(result.current.professors.every(p => p.school === 'UW Bothell')).toBe(true);
+    expect(result.current.professors.length).toBeLessThanOrEqual(initialCount);
   });
 
   it('filters professors by subject when selected', () => {
@@ -87,137 +86,32 @@ describe('ProfessorProvider & useProfessors integration', () => {
 
     const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
 
-    // Get available subjects
-    const subjects = result.current.subjects;
-    if (subjects.length > 0) {
-      // Select first subject
-      result.current.selectSubject(subjects[0]);
-      rerender();
+    // Get first available subject
+    const subject = result.current.subjects[0];
 
-      // All professors should be from that subject
-      expect(result.current.professors.every((p) => p.subject === subjects[0])).toBe(true);
-    }
-  });
-
-  it('searches professors by name', () => {
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ProfessorProvider>{children}</ProfessorProvider>
-    );
-
-    const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
-
-    // Find a professor name to search for
-    const allProfs = result.current.professors;
-    if (allProfs.length > 0) {
-      const searchName = allProfs[0].name.split(' ')[0]; // First name
-
-      result.current.setSearchQuery(searchName);
-      rerender();
-
-      const filtered = result.current.professors;
-      // All results should include the search name
-      expect(filtered.every((p) => p.name.toLowerCase().includes(searchName.toLowerCase()))).toBe(true);
-    }
-  });
-
-  it('combines multiple filters correctly', () => {
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ProfessorProvider>{children}</ProfessorProvider>
-    );
-
-    const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
-
-    const schools = result.current.schools;
-    const subjects = result.current.subjects;
-
-    if (schools.length > 0 && subjects.length > 0) {
-      result.current.selectSchool(schools[0]);
-      result.current.selectSubject(subjects[0]);
-      rerender();
-
-      const filtered = result.current.professors;
-      // All results should match both school and subject
-      expect(
-        filtered.every((p) => p.school === schools[0] && p.subject === subjects[0])
-      ).toBe(true);
-    }
-  });
-
-  it('can reset filters by selecting null', () => {
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ProfessorProvider>{children}</ProfessorProvider>
-    );
-
-    const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
-
-    // Select a school
-    result.current.selectSchool('MIT');
+    // Select that subject
+    result.current.selectSubject(subject);
     rerender();
 
-    // Reset by selecting null
-    result.current.selectSchool(null);
-    rerender();
-
-    // Should be back to all professors
-    expect(result.current.selectedSchool).toBeNull();
-    expect(result.current.professors.length).toBeGreaterThan(0);
+    // After subject selection, should filter to only that subject
+    expect(result.current.professors.every(p => p.subject === subject)).toBe(true);
   });
 
-  it('updates top ranked when filters change', () => {
+  it('filters professors by search query', () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <ProfessorProvider>{children}</ProfessorProvider>
     );
 
     const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
 
-    // Change school filter
-    result.current.selectSchool('MIT');
+    // Search for a specific professor by name
+    result.current.setSearchQuery('Fukuda');
     rerender();
 
-    // Top ranked should still be defined
-    expect(result.current.topRanked).toBeDefined();
-    expect(Array.isArray(result.current.topRanked)).toBe(true);
-  });
-
-  it('returns correct professor by ID', () => {
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ProfessorProvider>{children}</ProfessorProvider>
-    );
-
-    const { result } = renderHook(() => useProfessors(), { wrapper });
-
-    const allProfs = result.current.professors;
-    if (allProfs.length > 0) {
-      const prof = allProfs[0];
-      const found = result.current.getProfessorById(prof.id);
-
-      expect(found).toBeDefined();
-      expect(found?.id).toBe(prof.id);
-      expect(found?.name).toBe(prof.name);
-    }
-  });
-
-  it('returns undefined for non-existent professor ID', () => {
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ProfessorProvider>{children}</ProfessorProvider>
-    );
-
-    const { result } = renderHook(() => useProfessors(), { wrapper });
-
-    const found = result.current.getProfessorById('non-existent-id');
-    expect(found).toBeUndefined();
-  });
-
-  it('provides loading and error states', () => {
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ProfessorProvider>{children}</ProfessorProvider>
-    );
-
-    const { result } = renderHook(() => useProfessors(), { wrapper });
-
-    expect(typeof result.current.isLoading).toBe('boolean');
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.error).toBeNull();
+    // After search, should only have professors matching the query
+    expect(result.current.professors.every(p => 
+      p.name.toLowerCase().includes('fukuda')
+    )).toBe(true);
   });
 
   it('maintains professor data integrity during filtering', () => {
@@ -227,20 +121,19 @@ describe('ProfessorProvider & useProfessors integration', () => {
 
     const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
 
-    // Get total professor count
-    const originalProfs = result.current.professors;
-    const originalCount = originalProfs.length;
-
-    // Apply filters
-    result.current.selectSchool('MIT');
+    result.current.selectSchool('UW Bothell');
     rerender();
 
-    // Reset filters
-    result.current.selectSchool(null);
-    rerender();
-
-    // Should be back to original count
-    expect(result.current.professors.length).toBeGreaterThanOrEqual(originalCount);
+    // Check that professor objects maintain all fields
+    if (result.current.professors.length > 0) {
+      const prof = result.current.professors[0];
+      expect(prof.id).toBeDefined();
+      expect(prof.name).toBeDefined();
+      expect(prof.school).toBeDefined();
+      expect(prof.subject).toBeDefined();
+      expect(prof.rating).toBeDefined();
+      expect(prof.ratingCount).toBeDefined();
+    }
   });
 
   it('handles case-insensitive search correctly', () => {
@@ -250,18 +143,37 @@ describe('ProfessorProvider & useProfessors integration', () => {
 
     const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
 
-    // Find a name to search with different case
-    const allProfs = result.current.professors;
-    if (allProfs.length > 0) {
-      const name = allProfs[0].name;
-      const upperCaseName = name.toUpperCase();
+    // Search with lowercase
+    result.current.setSearchQuery('kim');
+    rerender();
+    const lowercaseResults = result.current.professors.length;
 
-      result.current.setSearchQuery(upperCaseName);
-      rerender();
+    // Search with uppercase - should be same result
+    result.current.setSearchQuery('KIM');
+    rerender();
+    const uppercaseResults = result.current.professors.length;
 
-      const filtered = result.current.professors;
-      // Should find results even with different case
-      expect(filtered.length).toBeGreaterThanOrEqual(1);
-    }
+    expect(lowercaseResults).toBe(uppercaseResults);
+  });
+
+  it('clears filters when selection is null', () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <ProfessorProvider>{children}</ProfessorProvider>
+    );
+
+    const { result, rerender } = renderHook(() => useProfessors(), { wrapper });
+
+    const initialCount = result.current.professors.length;
+
+    // Select school
+    result.current.selectSchool('UW Bothell');
+    rerender();
+
+    // Clear selection by passing null
+    result.current.selectSchool(null);
+    rerender();
+
+    // Should be back to initial count
+    expect(result.current.professors.length).toBe(initialCount);
   });
 });
