@@ -1,4 +1,3 @@
-import './App.css';
 import { ProfessorProvider } from './hooks/ProfessorProvider';
 import { FilterControls } from './components/FilterControls';
 import { ProfessorResults } from './components/ProfessorResults';
